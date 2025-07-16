@@ -14,6 +14,8 @@ import {
 import type { Readers } from "../types/Readers";
 import { Link } from "react-router-dom";
 import { getReader } from "../service/readerService";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const ReaderPage = () => {
   const [readers, setReaders] = useState<Readers[]>([]);
@@ -29,6 +31,21 @@ const ReaderPage = () => {
     };
     fetchData();
   }, []);
+
+  const deleteReader = async (readerId: string) => {
+    await axios
+      .delete(`http://localhost:3000/api/reader/${readerId}`)
+      .then((resp) => {
+        setReaders((pre) => pre.filter((reader) => reader.id !== readerId));
+        toast.success("Reader Deleted successfully!", {
+          position: "top-right",
+          duration: 3000,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div className="min-h-screen flex flex-col  items-center justify-center bg-gray-100 px-4">
@@ -83,11 +100,16 @@ const ReaderPage = () => {
                     {reader.borrowedBooks}
                   </TableCell>
                   <TableCell className="text-center space-x-2">
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white px-3">
-                      <i className="fa-regular fa-pen-to-square text-1xl "></i>
-                    </Button>
+                    <Link to={`/updateReader/` + reader.id}>
+                      <Button className="bg-blue-600 hover:bg-blue-700 text-white px-3">
+                        <i className="fa-regular fa-pen-to-square text-1xl "></i>
+                      </Button>
+                    </Link>
 
-                    <Button className="bg-red-600 hover:bg-red-700 text-white px-3">
+                    <Button
+                      onClick={() => deleteReader(reader.id)}
+                      className="bg-red-600 hover:bg-red-700 text-white px-3"
+                    >
                       <i className="fa-solid fa-trash"></i>
                     </Button>
                   </TableCell>
