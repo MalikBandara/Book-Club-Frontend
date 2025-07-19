@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import DashboardHome from "./pages/DashboardHome";
 import BookPage from "./pages/BookPage";
 import AddBook from "./form/AddBookForm";
+import UpdateBook from "./form/UpdateBookForm";
 
 function App() {
     const router = createBrowserRouter([
@@ -18,10 +19,19 @@ function App() {
             path: "/addReader",
             element: <ReaderForm />,
         },
+
+        //updates
         {
             path: "/updateReader/:id",
             element: <UpdateReader />,
         },
+        {
+            path: "/updateBook/:id",
+            element: <UpdateBook />,
+        },
+
+
+        // dashboard routes
         {
             path: "/admin-dashboard",
             element: <Dashboard />, // layout

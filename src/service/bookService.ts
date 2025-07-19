@@ -1,4 +1,4 @@
-import type { Books, BooksForSave } from "../types/Books";
+import type { BookFormData, Books, BooksForSave } from "../types/Books";
 import apiClient from "./apiClient";
 
 // this use for the response
@@ -20,4 +20,14 @@ export const createBook = async (book: Omit<BooksForSave, "id">): Promise<Create
 export const deleteExistingBook = async (id: string): Promise<CreateBookResponse> => {
     const response = await apiClient.delete(`/book/${id}`);
     return response.data;
+};
+
+export const getBookById = async (id: string): Promise<Books> => {
+    const resp = await apiClient.get(`/book/${id}`);
+    return resp.data;
+};
+
+export const updateExistingBook = async (id: string, book: BookFormData): Promise<CreateBookResponse> => {
+    const response =  await apiClient.put(`/book/${id}`, book);
+    return response.data
 };

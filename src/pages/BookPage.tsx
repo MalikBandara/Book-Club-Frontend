@@ -81,7 +81,7 @@ const BookPage = () => {
                                     <TableCell className="text-center">{book.status}</TableCell>
                                     <TableCell className="text-center">{book.isbn}</TableCell>
                                     <TableCell className="space-x-2 text-center">
-                                        <Link to={`/updateReader/` + book.id}>
+                                        <Link to={`/updateBook/` + book.id}>
                                             <Button className="bg-blue-600 px-3 text-white hover:bg-blue-700">
                                                 <i className="fa-regular fa-pen-to-square text-1xl"></i>
                                             </Button>
