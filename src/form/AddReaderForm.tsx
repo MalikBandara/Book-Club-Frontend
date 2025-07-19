@@ -32,8 +32,8 @@ const AddReader = () => {
         e.preventDefault();
 
         try {
-            await createReader(reader);
-            toast.success("Reader created successfully!", {
+            const response = await createReader(reader);
+            toast.success(`${response.message}`, {
                 position: "top-right",
                 duration: 3000,
             });

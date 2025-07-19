@@ -18,10 +18,28 @@ const SideBar = () => {
                     Readers
                 </Link>
                 <Link
-                    to="/items"
+                    to="/admin-dashboard/books"
                     className="block rounded p-2 hover:bg-gray-700"
                 >
-                    Items
+                    Books
+                </Link>
+                <Link
+                    to="/admin-dashboard/books"
+                    className="block rounded p-2 hover:bg-gray-700"
+                >
+                    Issue Book
+                </Link>
+                <Link
+                    to="/admin-dashboard/books"
+                    className="block rounded p-2 hover:bg-gray-700"
+                >
+                    Return Book
+                </Link>
+                <Link
+                    to="/admin-dashboard/books"
+                    className="block rounded p-2 hover:bg-gray-700"
+                >
+                    Settings
                 </Link>
             </nav>
         </div>
