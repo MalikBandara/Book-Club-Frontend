@@ -21,7 +21,7 @@ export const getReaderById = async (id: string): Promise<Readers> => {
     return response.data;
 };
 
-export const updateEXReader = async (id: string, reader: ReaderFormData): Promise<Readers> => {
+export const updateEXReader = async (id: string, reader: ReaderFormData): Promise<CreateReaderResponse> => {
     const response = await apiClient.put(`/reader/${id}`, reader);
     return response.data;
 };

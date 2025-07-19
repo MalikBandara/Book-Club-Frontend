@@ -23,6 +23,56 @@ const AddReader = () => {
 
     const navigate = useNavigate();
 
+    const validate = (data: ReaderFormData) => {
+        const errors: string[] = [];
+
+        // Name: Required, min length, only letters & spaces allowed
+        if (!data.name.trim()) {
+            errors.push("Name is required");
+        } else if (data.name.length < 3) {
+            errors.push("Name must be at least 3 characters");
+        } else {
+            const nameRegex = /^[A-Za-z\s]+$/;
+            if (!nameRegex.test(data.name)) {
+                errors.push("Name can only contain letters and spaces");
+            }
+        }
+
+        // Email: Required + format
+        if (!data.email.trim()) {
+            errors.push("Email is required");
+        } else {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(data.email)) {
+                errors.push("Email is invalid");
+            }
+        }
+
+        // Phone: Required, 10 digits only (no letters)
+        if (!data.phone.trim()) {
+            errors.push("Phone number is required");
+        } else {
+            const phoneRegex = /^\d{10}$/;
+            if (!phoneRegex.test(data.phone)) {
+                errors.push("Phone number must be exactly 10 digits and numbers only");
+            }
+        }
+
+        // Address: Required + min length
+        if (!data.address.trim()) {
+            errors.push("Address is required");
+        } else if (data.address.length < 5) {
+            errors.push("Address must be at least 5 characters");
+        }
+
+        // Membership ID: Required
+        if (!data.memberShipId.trim()) {
+            errors.push("Membership ID is required");
+        }
+
+        return errors;
+    };
+
     const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setReader({ ...reader, [name]: value });
@@ -31,17 +81,33 @@ const AddReader = () => {
     const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        // ✅ Validate before submitting
+        const errors = validate(reader);
+        if (errors.length > 0) {
+            errors.forEach((err) =>
+                toast.error(err, {
+                    position: "top-right",
+                    duration: 3000,
+                }),
+            );
+            return;
+        }
+
         try {
             const response = await createReader(reader);
             toast.success(`${response.message}`, {
                 position: "top-right",
-                duration: 3000,
+                duration: 1500,
             });
 
             setReader(initialReader); // reset form
             navigate("/admin-dashboard/readers"); // redirect to home
         } catch (error: any) {
             console.error("Failed to create reader:", error);
+            toast.error(`${error.response?.data?.message || error.message}`, {
+                position: "top-right",
+                duration: 3000,
+            });
         }
     };
 

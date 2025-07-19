@@ -8,9 +8,6 @@ import { getReaderById, updateEXReader } from "../service/readerService";
 import type { ReaderFormData } from "../types/Readers";
 
 const updateReader = () => {
-    // for loading ui
-    // const [loading, setLoading] = useState(false);
-
     const initialReader: ReaderFormData = {
         name: "",
         email: "",
@@ -22,7 +19,6 @@ const updateReader = () => {
     const [reader, setReader] = useState(initialReader);
 
     const { id } = useParams();
-
     const navigate = useNavigate();
 
     const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,12 +26,53 @@ const updateReader = () => {
         setReader({ ...reader, [name]: value });
     };
 
+    // ✅ Validation Function
+    const validate = (data: ReaderFormData): string[] => {
+        const errors: string[] = [];
+
+        // Name validation
+        if (!data.name.trim()) {
+            errors.push("Name is required");
+        } else if (data.name.length < 3) {
+            errors.push("Name must be at least 3 characters");
+        } else if (!/^[A-Za-z\s]+$/.test(data.name)) {
+            errors.push("Name can only contain letters and spaces");
+        }
+
+        // Email validation
+        if (!data.email.trim()) {
+            errors.push("Email is required");
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+            errors.push("Email is invalid");
+        }
+
+        // Phone number validation
+        if (!String(data.phone).trim()) {
+            errors.push("Phone number is required");
+        } else if (!/^\d{10}$/.test(data.phone)) {
+            errors.push("Phone number must be exactly 10 digits");
+        }
+
+        // Address validation
+        if (!data.address.trim()) {
+            errors.push("Address is required");
+        } else if (data.address.length < 5) {
+            errors.push("Address must be at least 5 characters");
+        }
+
+        // Membership ID validation
+        if (!data.memberShipId.trim()) {
+            errors.push("Membership ID is required");
+        }
+
+        return errors;
+    };
+
     useEffect(() => {
         const fetchReader = async () => {
             if (!id) return;
             try {
                 const fetchReader = await getReaderById(id);
-
                 setReader(fetchReader);
             } catch (error) {
                 console.log(error);
@@ -48,25 +85,42 @@ const updateReader = () => {
         e.preventDefault();
         if (!id) return;
 
+        // ✅ Validate before submitting
+        const errors = validate(reader);
+        if (errors.length > 0) {
+            errors.forEach((err) =>
+                toast.error(err, {
+                    position: "top-right",
+                    duration: 3000,
+                }),
+            );
+            return;
+        }
+
         try {
-            // await createReader(reader);
-            const data = await updateEXReader(id, reader); // ✅ pass reader
-            toast.success("Reader updated successfully!", {
+            const response = await updateEXReader(id, reader);
+            toast.success(`${response.message}`, {
                 position: "top-right",
-                duration: 3000,
+                duration: 1500,
             });
 
-            setReader(initialReader); // reset form
-            navigate("/admin-dashboard/readers"); // redirect to home
+            setReader(initialReader);
+            navigate("/admin-dashboard/readers");
         } catch (error: any) {
-            console.error("Failed to create reader:", error);
+            toast.error(`${error.response?.data?.message || error.message}`, {
+                duration: 3000,
+                position: "top-right",
+            });
         }
     };
 
     return (
         <div className="flex min-h-screen w-full items-center justify-center bg-sky-50 px-4">
             <div className="w-full max-w-md rounded-[10px] bg-white p-8 shadow-lg">
-                <Link to="/admin-dashboard/readers" className="mb-4 flex items-center">
+                <Link
+                    to="/admin-dashboard/readers"
+                    className="mb-4 flex items-center"
+                >
                     <Button className="mb-5 bg-gray-600 hover:bg-gray-500">
                         <i className="fa-solid fa-backward mr-2"></i> Back
                     </Button>
@@ -79,12 +133,7 @@ const updateReader = () => {
                     onSubmit={submitForm}
                 >
                     <div>
-                        <Label
-                            htmlFor="name"
-                            className="mb-2 block text-sm font-medium text-gray-700"
-                        >
-                            Name
-                        </Label>
+                        <Label htmlFor="name">Name</Label>
                         <Input
                             type="text"
                             id="name"
@@ -92,86 +141,60 @@ const updateReader = () => {
                             value={reader.name}
                             onChange={inputHandler}
                             placeholder="Enter name"
-                            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-sky-500 focus:outline-none"
                         />
                     </div>
 
                     <div>
-                        <Label
-                            htmlFor="email"
-                            className="mb-2 block text-sm font-medium text-gray-700"
-                        >
-                            Email
-                        </Label>
+                        <Label htmlFor="email">Email</Label>
                         <Input
                             type="email"
                             id="email"
                             name="email"
                             value={reader.email}
                             onChange={inputHandler}
-                            placeholder="Enter Email"
-                            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                            placeholder="Enter email"
                         />
                     </div>
 
                     <div>
-                        <Label
-                            htmlFor="phone"
-                            className="mb-3 block text-sm font-medium text-gray-700"
-                        >
-                            Phone Number
-                        </Label>
+                        <Label htmlFor="phone">Phone</Label>
                         <Input
-                            type="number"
+                            type="text"
                             id="phone"
                             name="phone"
                             value={reader.phone}
                             onChange={inputHandler}
-                            placeholder="Enter phone number"
-                            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                            placeholder="Enter phone"
                         />
                     </div>
 
                     <div>
-                        <Label
-                            htmlFor="address"
-                            className="mb-3 block text-sm font-medium text-gray-700"
-                        >
-                            Address
-                        </Label>
+                        <Label htmlFor="address">Address</Label>
                         <Input
                             type="text"
                             id="address"
                             name="address"
                             value={reader.address}
                             onChange={inputHandler}
-                            autoComplete="off"
-                            placeholder="Enter Address"
-                            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                            placeholder="Enter address"
                         />
                     </div>
 
                     <div>
-                        <Label
-                            htmlFor="membershipId"
-                            className="mb-3 block text-sm font-medium text-gray-700"
-                        >
-                            Membership ID
-                        </Label>
+                        <Label htmlFor="memberShipId">Membership ID</Label>
                         <Input
                             type="text"
                             id="memberShipId"
                             name="memberShipId"
                             value={reader.memberShipId}
                             onChange={inputHandler}
-                            placeholder="Enter Membership ID"
-                            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                            placeholder="Enter membership ID"
                         />
                     </div>
 
                     <Button
                         type="submit"
-                        className="w-full rounded-md bg-sky-500 py-2 text-white transition duration-200 hover:bg-sky-600"
+                        className="w-full bg-sky-500 hover:bg-sky-600"
                     >
                         Submit
                     </Button>
