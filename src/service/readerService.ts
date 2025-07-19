@@ -1,3 +1,4 @@
+import type { promises } from "dns";
 import type { ReaderFormData, Readers } from "../types/Readers";
 import apiClient from "./apiClient";
 
@@ -23,5 +24,10 @@ export const updateEXReader = async (
   reader: ReaderFormData
 ): Promise<Readers> => {
   const response = await apiClient.put(`/reader/${id}`, reader);
+  return response.data;
+};
+
+export const deleteExReader = async (id: string) => {
+  const response = await apiClient.delete(`/reader/${id}`);
   return response.data;
 };

@@ -13,8 +13,8 @@ import {
 
 import type { Readers } from "../types/Readers";
 import { Link } from "react-router-dom";
-import { getReader } from "../service/readerService";
-import axios from "axios";
+import { deleteExReader, getReader } from "../service/readerService";
+
 import toast from "react-hot-toast";
 
 const ReaderPage = () => {
@@ -33,18 +33,20 @@ const ReaderPage = () => {
   }, []);
 
   const deleteReader = async (readerId: string) => {
-    await axios
-      .delete(`http://localhost:3000/api/reader/${readerId}`)
-      .then((resp) => {
-        setReaders((pre) => pre.filter((reader) => reader.id !== readerId));
-        toast.success("Reader Deleted successfully!", {
-          position: "top-right",
-          duration: 3000,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
+    try {
+      if (!readerId) {
+        toast.error("No Reader Found in id ");
+      }
+
+      const resp = await deleteExReader(readerId);
+      setReaders((pre) => pre.filter((reader) => reader.id !== readerId));
+      toast.success(resp.message, {
+        position: "top-right",
+        duration: 3000,
       });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
