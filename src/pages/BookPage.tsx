@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Button } from "../components/ui/button";
-import { Table, TableCaption, TableHeader, TableRow, TableHead, TableBody, TableFooter, TableCell } from "../components/ui/table";
+import { Table, TableCaption, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../components/ui/table";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import type { Books } from "../types/Books";
 import { deleteExistingBook, getBook } from "../service/bookService";
-import toast from "react-hot-toast";
 
 const BookPage = () => {
     const [books, setBooks] = useState<Books[]>([]);
@@ -16,7 +16,7 @@ const BookPage = () => {
                 const data = await getBook();
                 setBooks(data);
             } catch (error) {
-                console.log("Error while fetching data", error);
+                console.error("Error while fetching data", error);
             }
         };
         fetchData();
@@ -24,7 +24,8 @@ const BookPage = () => {
 
     const deleteBook = async (bookId: string) => {
         if (!bookId) {
-            toast.error("No Book Found in id ");
+            toast.error("No Book Found in id");
+            return;
         }
         try {
             const res = await deleteExistingBook(bookId);
@@ -39,66 +40,72 @@ const BookPage = () => {
     };
 
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100 px-4">
-            <h1 className="mb-8 text-4xl font-bold text-gray-800">Book Page</h1>
-            <div className="w-full max-w-6xl rounded bg-white p-6 shadow-md">
+        <div className="flex min-h-screen flex-col items-center justify-center bg-white px-4">
+            <h1 className="mb-8 text-4xl font-semibold text-green-800 uppercase">Book Page</h1>
+
+            <div className="w-full max-w-6xl rounded-lg border border-green-300 bg-white p-6 shadow-xl">
                 <Link
                     to="/addBook"
-                    className="mb-6 inline-flex items-center gap-2 rounded bg-sky-600 px-3 py-2 font-medium text-white shadow-md transition duration-200 hover:bg-sky-700"
+                    className="mb-6 inline-flex items-center gap-2 rounded bg-black px-4 py-2 font-medium text-white shadow-md transition duration-300 hover:scale-105 hover:bg-green-800 hover:shadow-lg"
                 >
-                    Add Books<i className="fa-solid fa-book"></i>
+                    Add Book <i className="fa-solid fa-book"></i>
                 </Link>
 
-                <Table className="w-full rounded-md border">
+                <Table className="w-full rounded-lg border border-gray-200 bg-white shadow-sm">
                     <TableCaption className="mt-2 text-sm text-gray-500">A list of your recent books</TableCaption>
+
+                    {/* Table Header */}
                     <TableHeader>
-                        <TableRow className="bg-sky-500 text-gray-800">
-                            <TableHead className="w-[120px] text-white"></TableHead>
-                            <TableHead className="w-[120px] text-white">Title</TableHead>
-                            <TableHead className="w-[120px] text-white">Author</TableHead>
-                            <TableHead className="text-center text-white">Publisher</TableHead>
-                            <TableHead className="text-center text-white">Publish Date</TableHead>
-                            <TableHead className="text-center text-white">Category</TableHead>
-                            <TableHead className="text-center text-white">Status</TableHead>
-                            <TableHead className="text-center text-white">ISBN</TableHead>
-                            <TableHead className="text-center text-white">Action</TableHead>
+                        <TableRow className="bg-gray-100 text-sm text-gray-700">
+                            <TableHead className="px-4 py-3 text-left">Id</TableHead>
+                            <TableHead className="px-4 py-3 text-left">Title</TableHead>
+                            <TableHead className="px-4 py-3 text-left">Author</TableHead>
+                            <TableHead className="px-4 py-3 text-left">Publisher</TableHead>
+                            <TableHead className="px-4 py-3 text-left">Publish Date</TableHead>
+                            <TableHead className="px-4 py-3 text-left">Category</TableHead>
+                            <TableHead className="px-4 py-3 text-left">Status</TableHead>
+                            <TableHead className="px-4 py-3 text-left">ISBN</TableHead>
+                            <TableHead className="px-4 py-3 text-center">Action</TableHead>
                         </TableRow>
                     </TableHeader>
-                    <TableBody>
-                        {books.map((book, index) => {
-                            return (
-                                <TableRow className="hover:bg-gray-50">
-                                    <TableCell className="p-4 text-center">{index + 1}</TableCell>
-                                    <TableCell>
-                                        <span className="inline-block rounded bg-green-100 px-2 py-1 text-center text-xs font-semibold text-green-700">
-                                            {book.title}
-                                        </span>
-                                    </TableCell>
-                                    <TableCell className="text-center">{book.author}</TableCell>
-                                    <TableCell className="text-center">{book.publisher}</TableCell>
-                                    <TableCell className="text-center">{book.publishDate?.split("T")[0]}</TableCell>
-                                    <TableCell className="text-center">{book.category}</TableCell>
-                                    <TableCell className="text-center">{book.status}</TableCell>
-                                    <TableCell className="text-center">{book.isbn}</TableCell>
-                                    <TableCell className="space-x-2 text-center">
-                                        <Link to={`/updateBook/` + book.id}>
-                                            <Button className="bg-blue-600 px-3 text-white hover:bg-blue-700">
-                                                <i className="fa-regular fa-pen-to-square text-1xl"></i>
+
+                    {/* Table Body */}
+                    <TableBody className="divide-y divide-gray-100 bg-white text-sm text-gray-800">
+                        {books.map((book, index) => (
+                            <TableRow
+                                key={book.id}
+                                className="hover:bg-gray-50"
+                            >
+                                <TableCell className="px-4 py-3 font-medium">{index + 1}</TableCell>
+                                <TableCell className="px-4 py-3">{book.title}</TableCell>
+                                <TableCell className="px-4 py-3">{book.author}</TableCell>
+                                <TableCell className="px-4 py-3">{book.publisher}</TableCell>
+                                <TableCell className="px-4 py-3">{book.publishDate?.split("T")[0]}</TableCell>
+                                <TableCell className="px-4 py-3">{book.category}</TableCell>
+                                <TableCell className="px-4 py-3">{book.status}</TableCell>
+                                <TableCell className="px-4 py-3">{book.isbn}</TableCell>
+                                <TableCell className="px-4 py-3 text-center">
+                                    <div className="flex justify-center gap-2">
+                                        <Link to={`/updateBook/${book.id}`}>
+                                            <Button
+                                                className="rounded bg-green-600 px-3 py-2 text-white hover:bg-green-500"
+                                                title="Edit"
+                                            >
+                                                <i className="fa-regular fa-pen-to-square text-sm"></i>
                                             </Button>
                                         </Link>
-
                                         <Button
                                             onClick={() => deleteBook(book.id)}
-                                            className="bg-red-600 px-3 text-white hover:bg-red-700"
+                                            className="rounded bg-red-600 px-3 py-2 text-white hover:bg-red-500"
+                                            title="Delete"
                                         >
-                                            <i className="fa-solid fa-trash"></i>
+                                            <i className="fa-solid fa-trash text-sm"></i>
                                         </Button>
-                                    </TableCell>
-                                </TableRow>
-                            );
-                        })}
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        ))}
                     </TableBody>
-                    <TableFooter></TableFooter>
                 </Table>
             </div>
         </div>

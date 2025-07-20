@@ -3,8 +3,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
-*{
-  font-family: poppins, sans-serif;
+h2{
+  font-family: Georgia, 'Times New Roman', Times, serif;
+
 }
 
 @theme inline {
