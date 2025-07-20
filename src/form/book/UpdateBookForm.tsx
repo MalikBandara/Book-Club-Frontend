@@ -1,12 +1,12 @@
-import { Label } from "../components/ui/label";
-import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
+import { Label } from "../../components/ui/label";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-import type { BookFormData } from "../types/Books";
-import { getBookById, updateExistingBook } from "../service/bookService";
+import type { BookFormData } from "../../types/Books";
+import { getBookById, updateExistingBook } from "../../service/bookService";
 
 const UpdateBook = () => {
     // for loading ui

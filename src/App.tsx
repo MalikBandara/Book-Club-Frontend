@@ -1,19 +1,25 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import ReaderPage from "./pages/ReaderPage";
-import ReaderForm from "./form/AddReaderForm";
-import UpdateReader from "./form/UpdateReaderForm";
-import Dashboard from "./pages/Dashboard";
-import DashboardHome from "./pages/DashboardHome";
+import ReaderForm from "./form/readers/AddReaderForm";
+import UpdateReader from "./form/readers/UpdateReaderForm";
+import Dashboard from "./pages/DashboardPage";
+import DashboardHome from "./pages/DashboardHomePage";
 import BookPage from "./pages/BookPage";
-import AddBook from "./form/AddBookForm";
-import UpdateBook from "./form/UpdateBookForm";
+import AddBook from "./form/book/AddBookForm";
+import UpdateBook from "./form/book/UpdateBookForm";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignUpPage";
 
 function App() {
     const router = createBrowserRouter([
         {
             path: "/",
-            element: <Dashboard />,
+            element: <LoginPage />,
+        },
+        {
+            path: "/signup",
+            element: <SignupPage />,
         },
         {
             path: "/addReader",
@@ -29,7 +35,6 @@ function App() {
             path: "/updateBook/:id",
             element: <UpdateBook />,
         },
-
 
         // dashboard routes
         {

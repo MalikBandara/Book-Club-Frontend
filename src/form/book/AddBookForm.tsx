@@ -1,12 +1,12 @@
-import { Label } from "../components/ui/label";
-import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
+import { Label } from "../../components/ui/label";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-import type { BookFormData } from "../types/Books";
-import { createBook } from "../service/bookService";
+import type { BookFormData } from "../../types/Books";
+import { createBook } from "../../service/bookService";
 
 const AddBook = () => {
     // for loading ui
@@ -21,7 +21,7 @@ const AddBook = () => {
         status: "",
     };
 
-    const [book, setBook] = useState(initialBook);
+    const [book, setBook] = useState<BookFormData>(initialBook);
 
     const navigate = useNavigate();
 

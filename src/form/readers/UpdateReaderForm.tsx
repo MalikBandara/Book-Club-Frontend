@@ -1,11 +1,11 @@
-import { Label } from "../components/ui/label";
-import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
+import { Label } from "../../components/ui/label";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { getReaderById, updateEXReader } from "../service/readerService";
-import type { ReaderFormData } from "../types/Readers";
+import { getReaderById, updateEXReader } from "../../service/readerService";
+import type { ReaderFormData } from "../../types/Readers";
 
 const updateReader = () => {
     const initialReader: ReaderFormData = {

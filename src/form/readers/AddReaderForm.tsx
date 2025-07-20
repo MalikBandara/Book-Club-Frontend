@@ -1,11 +1,11 @@
-import { Label } from "../components/ui/label";
-import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
+import { Label } from "../../components/ui/label";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { createReader } from "../service/readerService";
-import type { ReaderFormData } from "../types/Readers";
+import { createReader } from "../../service/readerService";
+import type { ReaderFormData } from "../../types/Readers";
 
 const AddReader = () => {
     // for loading ui
@@ -19,7 +19,7 @@ const AddReader = () => {
         memberShipId: "",
     };
 
-    const [reader, setReader] = useState(initialReader);
+    const [reader, setReader] = useState<ReaderFormData>(initialReader);
 
     const navigate = useNavigate();
 
