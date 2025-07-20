@@ -4,33 +4,70 @@ import { createUser } from "../service/userService";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-// create initial state for user form
-// create useState for user form
-// add name and value for input fields
-// create inputHandler function to handle input changes
-// and create submit function and call other functions using this
-
 const SignupPage = () => {
     const initialUser: UserFormData = {
         name: "",
         email: "",
         password: "",
+        confirmPassword: "",
     };
 
+    interface FormErrors {
+        name?: string;
+        email?: string;
+        password?: string;
+        confirmPassword?: string;
+    }
+
+    const [errors, setErrors] = useState<FormErrors>({});
     const [user, setUser] = useState<UserFormData>(initialUser);
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
+
+    const validateForm = (): boolean => {
+        const newErrors: FormErrors = {};
+
+        if (!user.name) {
+            newErrors.name = "Name is required";
+        } else if (user.name.length < 2) {
+            newErrors.name = "Name must be at least 2 characters";
+        }
+
+        if (!user.email) {
+            newErrors.email = "Email is required";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email)) {
+            newErrors.email = "Please enter a valid email address";
+        }
+
+        if (!user.password) {
+            newErrors.password = "Password is required";
+        } else if (user.password.length < 6) {
+            newErrors.password = "Password must be at least 6 characters";
+        }
+
+        if (!user.confirmPassword) {
+            newErrors.confirmPassword = "Please confirm your password";
+        } else if (user.password !== user.confirmPassword) {
+            newErrors.confirmPassword = "Passwords do not match";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
 
     const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setUser({ ...user, [name]: value });
-        console.log(user);
     };
 
     const submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("User data submitted:", user);
+        setErrors({});
 
+        if (!validateForm()) return;
+
+        setLoading(true);
         try {
             const response = await createUser(user);
             toast.success(`${response.message}`, {
@@ -38,12 +75,14 @@ const SignupPage = () => {
                 duration: 1500,
             });
             setUser(initialUser);
-            navigate("/"); // redirect to login page after successful signup
+            navigate("/"); // Navigate to login or home
         } catch (error: any) {
             toast.error(`${error.response?.data?.message || error.message}`, {
                 position: "top-right",
                 duration: 3000,
             });
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -55,9 +94,10 @@ const SignupPage = () => {
             >
                 <h2 className="mb-6 text-center text-2xl font-bold">Sign Up</h2>
 
+                {/* Name */}
                 <label
                     htmlFor="name"
-                    className="mb-2 block font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700"
                 >
                     Full Name
                 </label>
@@ -68,12 +108,14 @@ const SignupPage = () => {
                     value={user.name}
                     onChange={inputHandler}
                     placeholder="John Doe"
-                    className="mb-4 w-full rounded border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="mt-1 mb-1 w-full rounded border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
+                {errors.name && <p className="mb-2 text-sm text-red-600">{errors.name}</p>}
 
+                {/* Email */}
                 <label
                     htmlFor="email"
-                    className="mb-2 block font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700"
                 >
                     Email
                 </label>
@@ -84,12 +126,14 @@ const SignupPage = () => {
                     value={user.email}
                     onChange={inputHandler}
                     placeholder="you@example.com"
-                    className="mb-4 w-full rounded border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="mt-1 mb-1 w-full rounded border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
+                {errors.email && <p className="mb-2 text-sm text-red-600">{errors.email}</p>}
 
+                {/* Password */}
                 <label
                     htmlFor="password"
-                    className="mb-2 block font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700"
                 >
                     Password
                 </label>
@@ -100,14 +144,35 @@ const SignupPage = () => {
                     value={user.password}
                     onChange={inputHandler}
                     placeholder="Enter your password"
-                    className="mb-6 w-full rounded border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="mt-1 mb-1 w-full rounded border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
+                {errors.password && <p className="mb-2 text-sm text-red-600">{errors.password}</p>}
 
+                {/* Confirm Password */}
+                <label
+                    htmlFor="confirmPassword"
+                    className="block text-sm font-medium text-gray-700"
+                >
+                    Confirm Password
+                </label>
+                <input
+                    id="confirmPassword"
+                    type="password"
+                    name="confirmPassword"
+                    value={user.confirmPassword}
+                    onChange={inputHandler}
+                    placeholder="Confirm your password"
+                    className="mt-1 mb-1 w-full rounded border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+                {errors.confirmPassword && <p className="mb-4 text-sm text-red-600">{errors.confirmPassword}</p>}
+
+                {/* Submit Button */}
                 <button
                     type="submit"
-                    className="w-full rounded bg-green-600 py-2 text-white transition hover:bg-green-700"
+                    className="w-full rounded bg-green-600 py-2 text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-green-400"
+                    disabled={loading}
                 >
-                    Sign Up
+                    {loading ? "Signing Up..." : "Sign Up"}
                 </button>
             </form>
         </div>

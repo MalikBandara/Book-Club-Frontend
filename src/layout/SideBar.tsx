@@ -1,6 +1,16 @@
 import { Link } from "react-router-dom";
+import { Button } from "../components/ui/button";
+import { useAuth } from "../context/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const SideBar = () => {
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate("/"); // redirect to login page after logout
+    };
     return (
         <div className="fixed h-screen w-64 bg-gray-800 text-white">
             <div className="border-b border-gray-700 p-4 text-xl font-bold">Admin</div>
@@ -41,6 +51,12 @@ const SideBar = () => {
                 >
                     Settings
                 </Link>
+                <Button
+                    onClick={handleLogout}
+                    className="block rounded p-2 hover:bg-gray-700"
+                >
+                    Logout
+                </Button>
             </nav>
         </div>
     );
