@@ -23,6 +23,61 @@ const UpdateBook = () => {
         status: "",
     };
 
+    const validateBook = (book: BookFormData): string[] => {
+        const errors: string[] = [];
+
+        const titleRegex = /^[A-Za-z0-9\s\-'"!?:,\.]{2,100}$/;
+        const authorRegex = /^[A-Za-z\s]+$/;
+        const publisherRegex = /^[A-Za-z\s&]+$/;
+        const categoryRegex = /^[A-Za-z\s]{3,30}$/;
+        const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+        // Title
+        if (!book.title.trim()) {
+            errors.push("Title is required");
+        } else if (!titleRegex.test(book.title)) {
+            errors.push("Title must be 2–100 characters and contain only letters, numbers, and basic punctuation");
+        }
+
+        // Author
+        if (!book.author.trim()) {
+            errors.push("Author is required");
+        } else if (!authorRegex.test(book.author)) {
+            errors.push("Author name must contain only letters and spaces");
+        }
+
+        // Publisher
+        if (!book.publisher.trim()) {
+            errors.push("Publisher is required");
+        } else if (!publisherRegex.test(book.publisher)) {
+            errors.push("Publisher must contain only letters, spaces, or '&' (no numbers allowed)");
+        }
+
+        // Publish Date
+        if (!book.publishDate.trim()) {
+            errors.push("Publish date is required");
+        } else if (!dateRegex.test(book.publishDate)) {
+            errors.push("Publish date must be in YYYY-MM-DD format");
+        }
+
+        // Category
+        if (!book.category.trim()) {
+            errors.push("Category is required");
+        } else if (!categoryRegex.test(book.category)) {
+            errors.push("Category must contain only letters and spaces (3–30 characters)");
+        }
+
+        // Status
+        const validStatuses = ["Available", "Issued"];
+        if (!book.status.trim()) {
+            errors.push("Status is required");
+        } else if (!validStatuses.includes(book.status)) {
+            errors.push("Status must be either 'Available' or 'Issued'");
+        }
+
+        return errors;
+    };
+
     const [book, setBook] = useState(initialBook);
 
     const { id } = useParams();
@@ -52,6 +107,17 @@ const UpdateBook = () => {
         e.preventDefault();
         if (!id) return;
 
+        const errors = validateBook(book);
+        if (errors.length > 0) {
+            errors.forEach((err) =>
+                toast.error(err, {
+                    position: "top-right",
+                    duration: 3000,
+                }),
+            );
+            return;
+        }
+        
         try {
             // await createReader(reader);
             const response = await updateExistingBook(id, book); // ✅ pass reader

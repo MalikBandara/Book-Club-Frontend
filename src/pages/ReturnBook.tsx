@@ -62,7 +62,7 @@ const ReturnBookPage = () => {
         <div className="flex min-h-screen items-start justify-center px-4 py-10">
             <div className="w-full max-w-6xl rounded-xl border border-gray-200 bg-white p-6 shadow-lg">
                 <div className="mb-6 text-center">
-                    <h1 className="text-2xl font-semibold text-gray-800">Issued Books</h1>
+                    <h1 className="text-2xl font-semibold text-green-800">Return Book page</h1>
                     <p className="text-sm text-gray-500">A list of all books issued to readers</p>
                 </div>
 

@@ -41,7 +41,10 @@ const BookPage = () => {
 
     return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-white px-4">
-            <h1 className="mb-8 text-4xl font-semibold text-green-800 uppercase">Book Page</h1>
+            <div className="mb-6 text-center">
+                <h1 className="text-2xl font-semibold text-green-700">Book Page</h1>
+                <p className="text-sm text-gray-500">A list of all books in the library</p>
+            </div>
 
             <div className="w-full max-w-6xl rounded-lg border border-green-300 bg-white p-6 shadow-xl">
                 <Link
@@ -52,7 +55,7 @@ const BookPage = () => {
                 </Link>
 
                 <Table className="w-full rounded-lg border border-gray-200 bg-white shadow-sm">
-                    <TableCaption className="mt-2 text-sm text-gray-500">A list of your recent books</TableCaption>
+                    <TableCaption className="mt-2 text-sm text-gray-500">Total Books: {books.length}</TableCaption>
 
                     {/* Table Header */}
                     <TableHeader>
