@@ -10,6 +10,8 @@ import AddBook from "./form/book/AddBookForm";
 import UpdateBook from "./form/book/UpdateBookForm";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignUpPage";
+import IssueBookForm from "./form/issueBook/IssueBookForm";
+import ReturnBookPage from "./pages/ReturnBook";
 
 function App() {
     const router = createBrowserRouter([
@@ -44,6 +46,8 @@ function App() {
                 { index: true, element: <DashboardHome /> }, // ✅ fixed
                 { path: "readers", element: <ReaderPage /> },
                 { path: "Books", element: <BookPage /> },
+                { path: "issueBook", element: <IssueBookForm /> },
+                { path: "returnBook", element: <ReturnBookPage /> },
                 // You can add more like:
                 // { path: "items", element: <ItemPage /> },
             ],

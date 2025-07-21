@@ -8,8 +8,9 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-    const [accessToken, setAccessToken] = useState<string>("");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [accessToken, setAccessToken] = useState("");
+    const [loading, setLoading] = useState(true);
 
     const login = (token: string) => {
         setAccessToken(token);
@@ -21,7 +22,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setAccessToken("");
         setIsLoggedIn(false);
         localStorage.removeItem("accessToken");
-        setHeader(""); // clear token from axios
+        setHeader("");
     };
 
     useEffect(() => {
@@ -29,11 +30,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         if (storedToken) {
             login(storedToken);
         }
+        setLoading(false);
     }, []);
 
     useEffect(() => {
         setHeader(accessToken);
     }, [accessToken]);
 
+    if (loading) {
+        // show a loader or empty div until auth state ready
+        return <div>Loading...</div>;
+    }
+
     return <AuthContext.Provider value={{ isLoggedIn, login, logout }}>{children}</AuthContext.Provider>;
 };
+

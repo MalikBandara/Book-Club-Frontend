@@ -32,8 +32,8 @@ const SideBar = () => {
                     { to: "/admin-dashboard/", label: "Dashboard", icon: <LayoutDashboard size={16} /> },
                     { to: "/admin-dashboard/readers", label: "Readers", icon: <Users size={16} /> },
                     { to: "/admin-dashboard/books", label: "Books", icon: <Book size={16} /> },
-                    { to: "/admin-dashboard/issue-book", label: "Issue Book", icon: <BookOpen size={16} /> },
-                    { to: "/admin-dashboard/return-book", label: "Return Book", icon: <BookCheck size={16} /> },
+                    { to: "/admin-dashboard/issueBook", label: "Issue Book", icon: <BookOpen size={16} /> },
+                    { to: "/admin-dashboard/returnBook", label: "Return Book", icon: <BookCheck size={16} /> },
                     { to: "/admin-dashboard/settings", label: "Settings", icon: <Settings size={16} /> },
                 ].map(({ to, label, icon }) => (
                     <Link
