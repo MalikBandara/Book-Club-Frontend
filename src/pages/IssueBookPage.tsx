@@ -29,12 +29,11 @@ const IssueBookPage = () => {
         fetchData();
     }, []);
 
-
     return (
         <div className="flex min-h-screen items-start justify-center px-4 py-10">
             <div className="w-full max-w-6xl rounded-xl border border-gray-200 bg-white p-6 shadow-lg">
                 <div className="mb-6 text-center">
-                    <h1 className="text-2xl font-semibold text-gray-800">Issued Books</h1>
+                    <h1 className="text-2xl font-semibold text-green-700">Issued Books</h1>
                     <p className="text-sm text-gray-500">A list of all books issued to readers</p>
                 </div>
 
@@ -62,15 +61,15 @@ const IssueBookPage = () => {
                                 className="transition-colors hover:bg-gray-50"
                             >
                                 <TableCell className="px-4 py-3 font-medium">{index + 1}</TableCell>
-                                <TableCell className="px-4 py-3">{book.book}</TableCell>
-                                <TableCell className="px-4 py-3 font-medium text-blue-600">{book.reader}</TableCell>
+                                <TableCell className="px-4 py-3">{book.bookTitle}</TableCell>
+                                <TableCell className="px-4 py-3 font-medium text-blue-600">{book.readerName}</TableCell>
                                 <TableCell className="px-4 py-3">{book.lendingDate.split("T")[0]}</TableCell>
                                 <TableCell className="px-4 py-3">{book.dueDate.split("T")[0]}</TableCell>
 
                                 {/* Status Badge (you can customize logic later) */}
                                 <TableCell className="px-4 py-3">
                                     <span
-                                        className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${book.status === "returned" ? "bg-green-100 text-green-700" : ""} ${book.status === "pending" ? "bg-yellow-100 text-yellow-700" : ""} `}
+                                        className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${book.status === "returned" ? "bg-green-100 text-green-700" : ""} ${book.status === "pending" ? "bg-yellow-100 text-yellow-700" : ""} ${book.status === "overdue" ? "bg-red-300 text-red-700 " : ""} `}
                                     >
                                         {book.status}
                                     </span>

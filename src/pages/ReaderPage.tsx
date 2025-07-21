@@ -45,7 +45,7 @@ const ReaderPage = () => {
             <div className="w-full max-w-6xl rounded-lg border border-green-300 bg-white p-6 shadow-xl">
                 <Link
                     to="/addReader"
-                    className="mb-6 inline-flex items-center gap-2 rounded bg-black px-4 py-2 font-medium text-white shadow-md transition duration-300 hover:scale-105 hover:bg-green-800 hover:shadow-lg"
+                    className="mb-6 inline-flex items-center gap-2 rounded bg-green-700 px-4 py-2 font-medium text-white shadow-md transition duration-300 hover:scale-105 hover:bg-green-800 hover:shadow-lg"
                 >
                     Add Reader <i className="fa-solid fa-user-plus"></i>
                 </Link>
@@ -62,7 +62,7 @@ const ReaderPage = () => {
                             <TableHead className="px-4 py-3 text-left">Phone</TableHead>
                             <TableHead className="px-4 py-3 text-left">Address</TableHead>
                             <TableHead className="px-4 py-3 text-left">Membership Id</TableHead>
-                            <TableHead className="px-4 py-3 text-left">Borrowed Books</TableHead>
+
                             <TableHead className="px-4 py-3 text-center">Action</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -80,12 +80,7 @@ const ReaderPage = () => {
                                 <TableCell className="px-4 py-3">{reader.phone}</TableCell>
                                 <TableCell className="px-4 py-3">{reader.address}</TableCell>
                                 <TableCell className="px-4 py-3 font-semibold text-green-600">{reader.memberShipId}</TableCell>
-                                <TableCell className="px-4 py-3">
-                                    {/* Badge-style */}
-                                    <span className="inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
-                                        {reader.borrowedBooks}
-                                    </span>
-                                </TableCell>
+
                                 <TableCell className="px-4 py-3 text-center">
                                     <div className="flex justify-center gap-2">
                                         <Link to={`/updateReader/${reader.id}`}>

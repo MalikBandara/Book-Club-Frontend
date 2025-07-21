@@ -68,18 +68,18 @@ const UpdateBook = () => {
     };
 
     return (
-        <div className="flex min-h-screen w-full items-center justify-center bg-sky-50 px-4">
-            <div className="w-full max-w-md rounded-[10px] bg-white p-8 shadow-lg">
+        <div className="flex min-h-screen w-full items-center justify-center bg-green-100 px-4">
+            <div className="w-full max-w-md rounded-[10px] border border-green-200 bg-white/80 p-8 shadow-2xl backdrop-blur-md">
                 <Link
                     to="/admin-dashboard/Books"
                     className="mb-4 flex items-center"
                 >
-                    <Button className="mb-5 bg-gray-600 hover:bg-gray-500">
+                    <Button className="mb-5 bg-green-700 text-white hover:bg-green-600">
                         <i className="fa-solid fa-backward mr-2"></i> Back
                     </Button>
                 </Link>
 
-                <h3 className="mb-6 text-center text-2xl font-semibold text-gray-800 uppercase">Update Book</h3>
+                <h3 className="mb-6 text-center text-2xl font-semibold text-green-900 uppercase">Update Book</h3>
 
                 <form
                     className="space-y-4"
@@ -88,7 +88,7 @@ const UpdateBook = () => {
                     <div>
                         <Label
                             htmlFor="title"
-                            className="mb-2 block text-sm font-medium text-gray-700"
+                            className="mb-2 block text-sm font-medium text-green-900"
                         >
                             Title
                         </Label>
@@ -99,14 +99,14 @@ const UpdateBook = () => {
                             value={book.title}
                             onChange={inputHandler}
                             placeholder="Enter title"
-                            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                            className="w-full rounded-md border border-green-300 bg-green-50 px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
                         />
                     </div>
 
                     <div>
                         <Label
                             htmlFor="author"
-                            className="mb-2 block text-sm font-medium text-gray-700"
+                            className="mb-2 block text-sm font-medium text-green-900"
                         >
                             Author
                         </Label>
@@ -117,16 +117,16 @@ const UpdateBook = () => {
                             value={book.author}
                             onChange={inputHandler}
                             placeholder="Enter Author"
-                            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                            className="w-full rounded-md border border-green-300 bg-green-50 px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
                         />
                     </div>
 
                     <div>
                         <Label
                             htmlFor="publisher"
-                            className="mb-3 block text-sm font-medium text-gray-700"
+                            className="mb-3 block text-sm font-medium text-green-900"
                         >
-                            publisher
+                            Publisher
                         </Label>
                         <Input
                             type="text"
@@ -135,14 +135,14 @@ const UpdateBook = () => {
                             value={book.publisher}
                             onChange={inputHandler}
                             placeholder="Enter publisher"
-                            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                            className="w-full rounded-md border border-green-300 bg-green-50 px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
                         />
                     </div>
 
                     <div>
                         <Label
                             htmlFor="publishDate"
-                            className="mb-3 block text-sm font-medium text-gray-700"
+                            className="mb-3 block text-sm font-medium text-green-900"
                         >
                             Publish Date
                         </Label>
@@ -154,14 +154,14 @@ const UpdateBook = () => {
                             onChange={inputHandler}
                             autoComplete="off"
                             placeholder="Enter Publish Date"
-                            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                            className="w-full rounded-md border border-green-300 bg-green-50 px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
                         />
                     </div>
 
                     <div>
                         <Label
                             htmlFor="category"
-                            className="mb-3 block text-sm font-medium text-gray-700"
+                            className="mb-3 block text-sm font-medium text-green-900"
                         >
                             Category
                         </Label>
@@ -172,14 +172,14 @@ const UpdateBook = () => {
                             value={book.category}
                             onChange={inputHandler}
                             placeholder="Enter Category"
-                            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                            className="w-full rounded-md border border-green-300 bg-green-50 px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
                         />
                     </div>
 
                     <div>
                         <Label
                             htmlFor="status"
-                            className="mb-3 block text-sm font-medium text-gray-700"
+                            className="mb-3 block text-sm font-medium text-green-900"
                         >
                             Status
                         </Label>
@@ -190,13 +190,13 @@ const UpdateBook = () => {
                             value={book.status}
                             onChange={inputHandler}
                             placeholder="Enter Status"
-                            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                            className="w-full rounded-md border border-green-300 bg-green-50 px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
                         />
                     </div>
 
                     <Button
                         type="submit"
-                        className="w-full rounded-md bg-sky-500 py-2 text-white transition duration-200 hover:bg-sky-600"
+                        className="w-full rounded-md bg-green-700 py-2 text-white transition duration-200 hover:bg-green-800"
                     >
                         Submit
                     </Button>

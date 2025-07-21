@@ -115,25 +115,30 @@ const updateReader = () => {
     };
 
     return (
-        <div className="flex min-h-screen w-full items-center justify-center bg-sky-50 px-4">
-            <div className="w-full max-w-md rounded-[10px] bg-white p-8 shadow-lg">
+        <div className="flex min-h-screen w-full items-center justify-center bg-green-100 px-4">
+            <div className="w-full max-w-md rounded-[10px] border border-green-200 bg-white/90 p-8 shadow-2xl backdrop-blur-md">
                 <Link
                     to="/admin-dashboard/readers"
                     className="mb-4 flex items-center"
                 >
-                    <Button className="mb-5 bg-gray-600 hover:bg-gray-500">
+                    <Button className="mb-5 bg-green-700 hover:bg-green-600">
                         <i className="fa-solid fa-backward mr-2"></i> Back
                     </Button>
                 </Link>
 
-                <h3 className="mb-6 text-center text-2xl font-semibold text-gray-800 uppercase">Update Reader</h3>
+                <h3 className="mb-6 text-center text-2xl font-semibold text-green-800 uppercase">Update Reader</h3>
 
                 <form
                     className="space-y-4"
                     onSubmit={submitForm}
                 >
                     <div>
-                        <Label htmlFor="name">Name</Label>
+                        <Label
+                            htmlFor="name"
+                            className="text-green-900"
+                        >
+                            Name
+                        </Label>
                         <Input
                             type="text"
                             id="name"
@@ -141,11 +146,17 @@ const updateReader = () => {
                             value={reader.name}
                             onChange={inputHandler}
                             placeholder="Enter name"
+                            className="w-full rounded-md border border-green-300 bg-green-50 px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
                         />
                     </div>
 
                     <div>
-                        <Label htmlFor="email">Email</Label>
+                        <Label
+                            htmlFor="email"
+                            className="text-green-900"
+                        >
+                            Email
+                        </Label>
                         <Input
                             type="email"
                             id="email"
@@ -153,11 +164,17 @@ const updateReader = () => {
                             value={reader.email}
                             onChange={inputHandler}
                             placeholder="Enter email"
+                            className="w-full rounded-md border border-green-300 bg-green-50 px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
                         />
                     </div>
 
                     <div>
-                        <Label htmlFor="phone">Phone</Label>
+                        <Label
+                            htmlFor="phone"
+                            className="text-green-900"
+                        >
+                            Phone
+                        </Label>
                         <Input
                             type="text"
                             id="phone"
@@ -165,11 +182,17 @@ const updateReader = () => {
                             value={reader.phone}
                             onChange={inputHandler}
                             placeholder="Enter phone"
+                            className="w-full rounded-md border border-green-300 bg-green-50 px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
                         />
                     </div>
 
                     <div>
-                        <Label htmlFor="address">Address</Label>
+                        <Label
+                            htmlFor="address"
+                            className="text-green-900"
+                        >
+                            Address
+                        </Label>
                         <Input
                             type="text"
                             id="address"
@@ -177,11 +200,17 @@ const updateReader = () => {
                             value={reader.address}
                             onChange={inputHandler}
                             placeholder="Enter address"
+                            className="w-full rounded-md border border-green-300 bg-green-50 px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
                         />
                     </div>
 
                     <div>
-                        <Label htmlFor="memberShipId">Membership ID</Label>
+                        <Label
+                            htmlFor="memberShipId"
+                            className="text-green-900"
+                        >
+                            Membership ID
+                        </Label>
                         <Input
                             type="text"
                             id="memberShipId"
@@ -189,12 +218,13 @@ const updateReader = () => {
                             value={reader.memberShipId}
                             onChange={inputHandler}
                             placeholder="Enter membership ID"
+                            className="w-full rounded-md border border-green-300 bg-green-50 px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
                         />
                     </div>
 
                     <Button
                         type="submit"
-                        className="w-full bg-sky-500 hover:bg-sky-600"
+                        className="w-full rounded-md bg-green-600 py-2 text-white transition duration-200 hover:bg-green-700"
                     >
                         Submit
                     </Button>

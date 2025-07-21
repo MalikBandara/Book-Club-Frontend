@@ -46,7 +46,7 @@ const BookPage = () => {
             <div className="w-full max-w-6xl rounded-lg border border-green-300 bg-white p-6 shadow-xl">
                 <Link
                     to="/addBook"
-                    className="mb-6 inline-flex items-center gap-2 rounded bg-black px-4 py-2 font-medium text-white shadow-md transition duration-300 hover:scale-105 hover:bg-green-800 hover:shadow-lg"
+                    className="mb-6 inline-flex items-center gap-2 rounded bg-green-700 px-4 py-2 font-medium text-white shadow-md transition duration-300 hover:scale-105 hover:bg-green-800 hover:shadow-lg"
                 >
                     Add Book <i className="fa-solid fa-book"></i>
                 </Link>

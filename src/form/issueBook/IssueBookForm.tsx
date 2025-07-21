@@ -22,6 +22,8 @@ const IssueBookForm = () => {
         reader: "",
         dueDate: "",
         lendingDate: "",
+        bookTitle: "",
+        readerName: "",
     });
 
     const navigate = useNavigate();
@@ -64,19 +66,27 @@ const IssueBookForm = () => {
             reader: selectedReaderId,
             dueDate: formData.dueDate,
             lendingDate: today,
+            bookTitle: books.find((b) => b.id === selectedBookId)?.title || "",
+            readerName: readers.find((r) => r.id === selectedReaderId)?.name || "",
         };
 
         try {
-            await issueNewBook(lendBook);
+            const response = await issueNewBook(lendBook);
             navigate("/admin-dashboard/books");
-            toast.success("Book issued successfully");
+            toast.success(`${response.message}`, {
+                position: "top-right",
+                duration: 1500,
+            });
 
             // Reset form
             setSelectedBookId("");
             setSelectedReaderId("");
-            setFormData({ book: "", reader: "", dueDate: "", lendingDate: "" });
-        } catch (error) {
-            toast.error("Failed to issue book");
+            setFormData({ book: "", reader: "", dueDate: "", lendingDate: "", bookTitle: "", readerName: "" });
+        } catch (error: any) {
+            toast.error(`${error.response?.data?.message || error.message}`, {
+                position: "top-right",
+                duration: 3000,
+            });
             console.error(error);
         }
     };
@@ -155,7 +165,7 @@ const IssueBookForm = () => {
 
                     <Button
                         type="submit"
-                        className="mt-5"
+                        className="mt-5 bg-green-700"
                     >
                         Issue Book
                     </Button>

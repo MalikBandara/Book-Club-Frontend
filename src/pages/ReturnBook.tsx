@@ -31,7 +31,6 @@ const ReturnBookPage = () => {
         fetchData();
     }, []);
 
-
     const updateBookStatus = async (bookId: string) => {
         try {
             if (!bookId) {
@@ -48,7 +47,9 @@ const ReturnBookPage = () => {
 
             // ✅ Update the returned issue's status in the state
             setIssueBook((prev) =>
-                prev.map((issue) => (issue.book === bookId && issue.status === "pending" ? { ...issue, status: "returned" } : issue)),
+                prev.map((issue) =>
+                    issue.book === bookId && (issue.status === "pending" || issue.status === "overdue") ? { ...issue, status: "returned" } : issue,
+                ),
             );
         } catch (error) {
             toast.error(error instanceof Error ? error.message : "Failed to update book status");
@@ -56,7 +57,6 @@ const ReturnBookPage = () => {
 
         console.log(`Updating status for book with ID: ${bookId}`);
     };
-
 
     return (
         <div className="flex min-h-screen items-start justify-center px-4 py-10">
@@ -90,17 +90,15 @@ const ReturnBookPage = () => {
                                 className="transition-colors hover:bg-gray-50"
                             >
                                 <TableCell className="px-4 py-3 font-medium">{index + 1}</TableCell>
-                                <TableCell className="px-4 py-3">{book.book}</TableCell>
-                                <TableCell className="px-4 py-3 font-medium text-blue-600">{book.reader}</TableCell>
+                                <TableCell className="px-4 py-3">{book.bookTitle}</TableCell>
+                                <TableCell className="px-4 py-3 font-medium text-blue-600">{book.readerName}</TableCell>
                                 <TableCell className="px-4 py-3">{book.lendingDate.split("T")[0]}</TableCell>
                                 <TableCell className="px-4 py-3">{book.dueDate.split("T")[0]}</TableCell>
 
                                 {/* Status Badge */}
                                 <TableCell className="px-4 py-3">
                                     <span
-                                        className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
-                                            book.status === "returned" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
-                                        }`}
+                                        className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${book.status === "returned" ? "bg-green-100 text-green-700" : ""} ${book.status === "pending" ? "bg-yellow-100 text-yellow-700" : ""} ${book.status === "overdue" ? "bg-red-300 text-red-700 " : ""} `}
                                     >
                                         {book.status}
                                     </span>
@@ -109,7 +107,7 @@ const ReturnBookPage = () => {
                                 {/* Action Buttons */}
                                 <TableCell className="px-4 py-3 text-center">
                                     <div className="flex justify-center gap-2">
-                                        {book.status === "pending" && (
+                                        {(book.status === "pending" || book.status === "overdue") && (
                                             <Button
                                                 onClick={() => updateBookStatus(book.book)}
                                                 className="rounded bg-green-600 px-3 py-2 text-white hover:bg-green-500"
