@@ -5,6 +5,8 @@ import toast from "react-hot-toast";
 
 import { getOverdueBooks, updateOverdueBookSt } from "../service/issueBookService";
 import type { IssueBook } from "../types/IssuBook";
+import emailjs from "@emailjs/browser";
+
 
 const OverduePage = () => {
     const [overdueBooks, setOverdueBooks] = useState<IssueBook[]>([]);
@@ -22,8 +24,30 @@ const OverduePage = () => {
     }, []);
 
     const updateOverdueStatus = async (Bid: string) => {
+        const overdueBook = overdueBooks.find((book) => book.id === Bid);
+        if (!overdueBook) return;
+
+
         try {
             const response = await updateOverdueBookSt(Bid);
+
+            // send email
+            const emailParams = {
+                reader_name: overdueBook.readerName,
+                reader_email: overdueBook.readerEmail, // make sure you have this field in your book object
+                book_title: overdueBook.bookTitle,
+                due_date: overdueBook.dueDate.split("T")[0],
+            };
+
+
+            await emailjs.send(
+                "service_gfhp8ni", // replace with your EmailJS service ID
+                "template_94998z6", // replace with your EmailJS template ID
+                emailParams,
+                "4lxpD2m7qljd42vBx", // replace with your EmailJS public key
+            );
+
+
             setOverdueBooks((prev) => prev.filter((book) => book.id !== Bid));
             toast.success(response.message, {
                 position: "top-right",

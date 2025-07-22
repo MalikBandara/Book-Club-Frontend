@@ -24,6 +24,7 @@ const IssueBookForm = () => {
         lendingDate: "",
         bookTitle: "",
         readerName: "",
+        readerEmail: "",
     });
 
     const navigate = useNavigate();
@@ -68,6 +69,7 @@ const IssueBookForm = () => {
             lendingDate: today,
             bookTitle: books.find((b) => b.id === selectedBookId)?.title || "",
             readerName: readers.find((r) => r.id === selectedReaderId)?.name || "",
+            readerEmail: readers.find((r) => r.id === selectedReaderId)?.email || "",
         };
 
         try {
@@ -81,7 +83,7 @@ const IssueBookForm = () => {
             // Reset form
             setSelectedBookId("");
             setSelectedReaderId("");
-            setFormData({ book: "", reader: "", dueDate: "", lendingDate: "", bookTitle: "", readerName: "" });
+            setFormData({ book: "", reader: "", dueDate: "", lendingDate: "", bookTitle: "", readerName: "" , readerEmail: "" });
         } catch (error: any) {
             toast.error(`${error.response?.data?.message || error.message}`, {
                 position: "top-right",

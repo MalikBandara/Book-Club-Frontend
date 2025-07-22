@@ -3,6 +3,7 @@ export type IssueBook = {
     book: string;
     bookTitle: string;
     readerName: string;
+    readerEmail: string;
     reader: string;
     dueDate: string;
     lendingDate: string;
@@ -13,6 +14,7 @@ export type IssueBookFormData = {
     book: string;
     bookTitle: string;
     readerName: string;
+    readerEmail: string;
     reader: string;
     dueDate: string;
     lendingDate: string;
