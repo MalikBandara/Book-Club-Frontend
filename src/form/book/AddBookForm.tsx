@@ -76,15 +76,15 @@ const AddBook = () => {
         return errors;
     };
 
-
     const [book, setBook] = useState<BookFormData>(initialBook);
 
     const navigate = useNavigate();
 
-    const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setBook({ ...book, [name]: value });
+        setBook((prevBook) => ({ ...prevBook, [name]: value }));
     };
+
 
     const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -226,15 +226,17 @@ const AddBook = () => {
                         >
                             Status
                         </Label>
-                        <Input
-                            type="text"
-                            id="status"
+                        <select
                             name="status"
+                            id="status"
                             value={book.status}
                             onChange={inputHandler}
-                            placeholder="Enter status (Available/Issued)"
                             className="w-full rounded-md border border-green-300 bg-green-50 px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
-                        />
+                        >
+                            <option value="">Select status</option>
+                            <option value="Available">Available</option>
+                            <option value="Issued">Issued</option>
+                        </select>
                     </div>
 
                     <Button

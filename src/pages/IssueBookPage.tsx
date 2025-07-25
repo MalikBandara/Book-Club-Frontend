@@ -5,6 +5,7 @@ import { getAllIssueBooks } from "../service/issueBookService";
 
 const IssueBookPage = () => {
     const [issueBook, setIssueBook] = useState<IssueBook[]>([]);
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -29,12 +30,30 @@ const IssueBookPage = () => {
         fetchData();
     }, []);
 
+
+    const filteredIssueBooks = issueBook.filter(
+        (book) =>
+            book.bookTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            book.readerName.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+
     return (
         <div className="flex min-h-screen items-start justify-center px-4 py-10">
-            <div className="w-full max-w-6xl rounded-xl border border-gray-200 bg-white p-6 shadow-lg">
+            <div className="flex w-full max-w-6xl flex-col items-center rounded-xl border border-gray-200 bg-white p-6 shadow-lg">
                 <div className="mb-6 text-center">
+                    <i className="fa-solid fa-book-open text-3xl text-green-600"></i>
                     <h1 className="text-2xl font-semibold text-green-700">Issued Books</h1>
                     <p className="text-sm text-gray-500">A list of all books issued to readers</p>
+                </div>
+
+                <div className="mb-4 w-full max-w-3xl">
+                    <input
+                        type="text"
+                        placeholder="Search by book title or reader name..."
+                        className="w-full rounded border border-gray-300 px-4 py-2 shadow-sm focus:border-green-500 focus:ring-1 focus:ring-green-300 focus:outline-none"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
                 </div>
 
                 <Table className="w-full overflow-hidden rounded-lg border shadow-sm">
@@ -55,21 +74,23 @@ const IssueBookPage = () => {
 
                     {/* Table Body */}
                     <TableBody className="divide-y divide-gray-100 text-sm text-gray-700">
-                        {issueBook.map((book, index) => (
+                        {filteredIssueBooks.map((book, index) => (
                             <TableRow
                                 key={book.id}
                                 className="transition-colors hover:bg-gray-50"
                             >
-                                <TableCell className="px-4 py-3 font-medium">{index + 1}</TableCell>
+                                <TableCell className="px-4 py-3 font-medium">{book.id}</TableCell>
                                 <TableCell className="px-4 py-3">{book.bookTitle}</TableCell>
                                 <TableCell className="px-4 py-3 font-medium text-blue-600">{book.readerName}</TableCell>
                                 <TableCell className="px-4 py-3">{book.lendingDate.split("T")[0]}</TableCell>
-                                <TableCell className="px-4 py-3">{book.dueDate.split("T")[0]}</TableCell>
+                                <TableCell className={`px-4 py-3 ${book.status === "overdue" ? "text-red-600" : ""}`}>
+                                    {book.dueDate.split("T")[0]}
+                                </TableCell>
 
                                 {/* Status Badge (you can customize logic later) */}
                                 <TableCell className="px-4 py-3">
                                     <span
-                                        className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${book.status === "returned" ? "bg-green-100 text-green-700" : ""} ${book.status === "pending" ? "bg-yellow-100 text-yellow-700" : ""} ${book.status === "overdue" ? "bg-red-300 text-red-700 " : ""} `}
+                                        className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${book.status === "returned" ? "bg-green-100 text-green-700" : ""} ${book.status === "pending" ? "bg-yellow-100 text-yellow-700" : ""} ${book.status === "overdue" ? "bg-red-300 text-red-700" : ""} `}
                                     >
                                         {book.status}
                                     </span>

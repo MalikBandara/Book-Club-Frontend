@@ -9,6 +9,16 @@ import { deleteExistingBook, getBook } from "../service/bookService";
 
 const BookPage = () => {
     const [books, setBooks] = useState<Books[]>([]);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const filteredBooks = books.filter(
+        (book) =>
+            book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            book.publisher.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            book.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            book.isbn.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
 
     useEffect(() => {
         const fetchData = async () => {
@@ -42,8 +52,19 @@ const BookPage = () => {
     return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-white px-4">
             <div className="mb-6 text-center">
+                <i className="fa-solid fa-book text-3xl text-green-600"></i>
                 <h1 className="text-2xl font-semibold text-green-700">Book Page</h1>
                 <p className="text-sm text-gray-500">A list of all books in the library</p>
+            </div>
+
+            <div className="mb-4 w-full max-w-3xl">
+                <input
+                    type="text"
+                    placeholder="Search by title, author, publisher, category or ISBN..."
+                    className="w-full rounded border border-gray-300 px-4 py-2 shadow-sm focus:border-green-500 focus:ring-1 focus:ring-green-300 focus:outline-none"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
             </div>
 
             <div className="w-full max-w-6xl rounded-lg border border-green-300 bg-white p-6 shadow-xl">
@@ -60,7 +81,7 @@ const BookPage = () => {
                     {/* Table Header */}
                     <TableHeader>
                         <TableRow className="bg-gray-100 text-sm text-gray-700">
-                            <TableHead className="px-4 py-3 text-left">Id</TableHead>
+                            <TableHead className="px-4 py-3 text-left">#</TableHead>
                             <TableHead className="px-4 py-3 text-left">Title</TableHead>
                             <TableHead className="px-4 py-3 text-left">Author</TableHead>
                             <TableHead className="px-4 py-3 text-left">Publisher</TableHead>
@@ -74,18 +95,25 @@ const BookPage = () => {
 
                     {/* Table Body */}
                     <TableBody className="divide-y divide-gray-100 bg-white text-sm text-gray-800">
-                        {books.map((book, index) => (
+                        {filteredBooks.map((book, index) => (
                             <TableRow
                                 key={book.id}
                                 className="hover:bg-gray-50"
                             >
                                 <TableCell className="px-4 py-3 font-medium">{index + 1}</TableCell>
                                 <TableCell className="px-4 py-3">{book.title}</TableCell>
-                                <TableCell className="px-4 py-3">{book.author}</TableCell>
+                                <TableCell className="px-4 py-3">
+                                    <i className="fa-solid fa-pen pe-3"></i>
+                                    {book.author}
+                                </TableCell>
                                 <TableCell className="px-4 py-3">{book.publisher}</TableCell>
                                 <TableCell className="px-4 py-3">{book.publishDate?.split("T")[0]}</TableCell>
                                 <TableCell className="px-4 py-3">{book.category}</TableCell>
-                                <TableCell className="px-4 py-3">{book.status}</TableCell>
+                                <TableCell
+                                    className={`mt-3 inline-block rounded-full text-xs font-medium ${book.status === "Available" ? "bg-green-100 text-green-700" : ""} ${book.status === "Issued" ? "bg-yellow-100 text-yellow-700" : ""} ${book.status === "overdue" ? "bg-red-300 text-red-700" : ""} `}
+                                >
+                                    {book.status}
+                                </TableCell>
                                 <TableCell className="px-4 py-3">{book.isbn}</TableCell>
                                 <TableCell className="px-4 py-3 text-center">
                                     <div className="flex justify-center gap-2">
