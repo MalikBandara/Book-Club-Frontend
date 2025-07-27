@@ -5,18 +5,49 @@ import toast from "react-hot-toast";
 
 import { getOverdueBooks, updateOverdueBookSt } from "../service/issueBookService";
 import type { IssueBook } from "../types/IssuBook";
+import { getBookById } from "../service/bookService";
+import { getReaderById } from "../service/readerService";
 import emailjs from "@emailjs/browser";
 
 const OverduePage = () => {
-    const [overdueBooks, setOverdueBooks] = useState<IssueBook[]>([]);
+    const [overdueBooks, setOverdueBooks] = useState<(IssueBook & { bookDetails?: { title: string }; readerDetails?: { name: string } })[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const data = await getOverdueBooks();
-                setOverdueBooks(data);
+
+                // For each overdue book, fetch book details and reader details
+                const enrichedData = await Promise.all(
+                    data.map(async (issue) => {
+                        let bookDetails, readerDetails;
+
+                        try {
+                            bookDetails = await getBookById(issue.book);
+                        } catch (err) {
+                            console.error("Failed to fetch book details for:", issue.book, err);
+                        }
+
+                        try {
+                            readerDetails = await getReaderById(issue.reader);
+                        } catch (err) {
+                            console.error("Failed to fetch reader details for:", issue.reader, err);
+                        }
+
+                        return {
+                            ...issue,
+                            bookDetails,
+                            readerDetails,
+                        };
+                    }),
+                );
+
+                setOverdueBooks(enrichedData);
             } catch (error) {
-                console.log("Error while fetching data", error);
+                 toast.error(`No Data is Available`, {
+                     duration: 3000,
+                     position: "top-right",
+                 });
             }
         };
         fetchData();
@@ -29,11 +60,11 @@ const OverduePage = () => {
         try {
             const response = await updateOverdueBookSt(Bid);
 
-            // Email
+            // Email params with fetched names/titles
             const emailParams = {
-                reader_name: overdueBook.readerName,
-                reader_email: overdueBook.readerEmail,
-                book_title: overdueBook.bookTitle,
+                reader_name: overdueBook.readerDetails?.name || "Reader",
+                reader_email: overdueBook.readerDetails?.email || overdueBook.readerEmail || "",
+                book_title: overdueBook.bookDetails?.title || "Book",
                 due_date: overdueBook.dueDate.split("T")[0],
             };
 
@@ -73,14 +104,14 @@ const OverduePage = () => {
 
                         <TableHeader>
                             <TableRow className="bg-gray-100 text-sm text-gray-700">
-                                <TableHead className="px-4 py-3 text-left">#</TableHead>
+                                <TableHead className="px-4 py-3 text-left">ID</TableHead>
                                 <TableHead className="px-4 py-3 text-left">Reader Name</TableHead>
-                                <TableHead className="px-4 py-3 text-left">Reader ID</TableHead>
+
                                 <TableHead className="px-4 py-3 text-left">Book Name</TableHead>
-                                <TableHead className="px-4 py-3 text-left">Book ID</TableHead>
+
                                 <TableHead className="px-4 py-3 text-left">Issued Date</TableHead>
                                 <TableHead className="px-4 py-3 text-left">Due Date</TableHead>
-                                <TableHead className="px-4 py-3 text-center">Mark as overdue</TableHead>
+                                <TableHead className="px-4 py-3 text-center">Mark as notified</TableHead>
                             </TableRow>
                         </TableHeader>
 
@@ -90,11 +121,21 @@ const OverduePage = () => {
                                     key={book.id}
                                     className="hover:bg-gray-50"
                                 >
-                                    <TableCell className="px-4 py-3 font-medium">{index + 1}</TableCell>
-                                    <TableCell className="px-4 py-3">{book.readerName}</TableCell>
-                                    <TableCell className="px-4 py-3 text-blue-600 hover:underline">{book.reader}</TableCell>
-                                    <TableCell className="px-4 py-3">{book.bookTitle}</TableCell>
-                                    <TableCell className="px-4 py-3">{book.book}</TableCell>
+                                    <TableCell className="px-4 py-3 font-medium">{book.id}</TableCell>
+                                    <TableCell className="px-4 py-3 font-medium text-blue-600">
+                                        <div>
+                                            <div className="font-semibold">{book.readerDetails?.name || "N/A"}</div>
+                                            <div className="text-xs text-gray-500">ID: {book.readerDetails?.id || "N/A"}</div>
+                                        </div>
+                                    </TableCell>
+
+                                    <TableCell className="px-4 py-3">
+                                        <div>
+                                            <div className="font-semibold">{book.bookDetails?.title || "N/A"}</div>
+                                            <div className="text-xs text-gray-500">ID: {book.book || "N/A"}</div>
+                                        </div>
+                                    </TableCell>
+
                                     <TableCell className="px-4 py-3 font-semibold text-green-600">{book.lendingDate.split("T")[0]}</TableCell>
                                     <TableCell className="px-4 py-3 font-semibold text-red-600">{book.dueDate.split("T")[0]}</TableCell>
                                     <TableCell className="px-4 py-3 text-center">

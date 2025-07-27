@@ -85,20 +85,33 @@ const AddBook = () => {
         setBook((prevBook) => ({ ...prevBook, [name]: value }));
     };
 
-
     const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const errors = validateBook(book);
         if (errors.length > 0) {
-            errors.forEach((err) =>
-                toast.error(err, {
+            toast.error(
+                <div className="text-sm">
+                    <ul className="list-disc pl-5">
+                        {errors.map((err, index) => (
+                            <li key={index}>{err}</li>
+                        ))}
+                    </ul>
+                </div>,
+                {
                     position: "top-right",
-                    duration: 3000,
-                }),
+                    duration: 6000,
+                    style: {
+                        background: "#1f1f1f",
+                        color: "#fff",
+                        maxWidth: "400px",
+                        whiteSpace: "pre-line",
+                    },
+                },
             );
             return;
         }
+
 
         try {
             const response = await createBook(book);
@@ -111,7 +124,10 @@ const AddBook = () => {
             setBook(initialBook); // reset form
             navigate("/admin-dashboard/books"); // redirect to home
         } catch (error: any) {
-            console.error("Failed to create book:", error);
+            toast.error(`${error.response?.data?.message || error.message}`, {
+                duration: 3000,
+                position: "top-right",
+            });
         }
     };
 
@@ -243,7 +259,7 @@ const AddBook = () => {
                         type="submit"
                         className="w-full rounded-md bg-green-600 py-2 text-white transition duration-200 hover:bg-green-700"
                     >
-                        Submit
+                        Add Book
                     </Button>
                 </form>
             </div>

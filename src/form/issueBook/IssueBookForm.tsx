@@ -36,8 +36,11 @@ const IssueBookForm = () => {
                 const readers = await getReader();
                 setBooks(books);
                 setReaders(readers);
-            } catch (error) {
-                console.error("Error fetching books or readers:", error);
+            } catch (error : any) {
+                toast.error(`${error.response?.data?.message || error.message}`, {
+                    duration: 3000,
+                    position: "top-right",
+                });
             }
         };
 

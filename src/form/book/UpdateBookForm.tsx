@@ -96,8 +96,11 @@ const UpdateBook = () => {
                 const fetchBook = await getBookById(id);
 
                 setBook(fetchBook);
-            } catch (error) {
-                console.log(error);
+            } catch (error: any) {
+                toast.error(`${error.response?.data?.message || error.message}`, {
+                    duration: 3000,
+                    position: "top-right",
+                });
             }
         };
         fetchBook();
@@ -109,15 +112,28 @@ const UpdateBook = () => {
 
         const errors = validateBook(book);
         if (errors.length > 0) {
-            errors.forEach((err) =>
-                toast.error(err, {
+            toast.error(
+                <div className="text-sm">
+                    <ul className="list-disc pl-5">
+                        {errors.map((err, index) => (
+                            <li key={index}>{err}</li>
+                        ))}
+                    </ul>
+                </div>,
+                {
                     position: "top-right",
-                    duration: 3000,
-                }),
+                    duration: 6000,
+                    style: {
+                        background: "#1f1f1f",
+                        color: "#fff",
+                        maxWidth: "400px",
+                        whiteSpace: "pre-line",
+                    },
+                },
             );
             return;
         }
-        
+
         try {
             // await createReader(reader);
             const response = await updateExistingBook(id, book); // ✅ pass reader
@@ -264,7 +280,7 @@ const UpdateBook = () => {
                         type="submit"
                         className="w-full rounded-md bg-green-700 py-2 text-white transition duration-200 hover:bg-green-800"
                     >
-                        Submit
+                        Update Book
                     </Button>
                 </form>
             </div>

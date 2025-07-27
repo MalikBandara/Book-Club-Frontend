@@ -6,6 +6,7 @@ import { getReader } from "../service/readerService";
 import { getBook } from "../service/bookService";
 import { getAllIssueBooks, getOverdueBooks } from "../service/issueBookService";
 import type { Value } from "react-calendar/dist/shared/types.js";
+import toast from "react-hot-toast";
 
 type OverdueBook = {
     _id: string;
@@ -68,7 +69,10 @@ const DashboardHome = () => {
                 }));
                 setOverdueBooks(transformed);
             } catch (error) {
-                console.error("Error fetching dashboard data:", error);
+                 toast.error(`No Data is Available`, {
+                     duration: 3000,
+                     position: "top-right",
+                 });
             }
         };
 

@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { Table, TableCaption, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../components/ui/table";
 import type { IssueBook } from "../types/IssuBook";
 import { getAllIssueBooks } from "../service/issueBookService";
+import { getBookById } from "../service/bookService";
+import { getReaderById } from "../service/readerService";
+import toast from "react-hot-toast";
 
 const IssueBookPage = () => {
     const [issueBook, setIssueBook] = useState<IssueBook[]>([]);
@@ -10,31 +13,63 @@ const IssueBookPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await getAllIssueBooks();
+                const issueData = await getAllIssueBooks();
 
-                const sortedData = data.sort((a, b) => {
+                const enrichedData = await Promise.all(
+                    issueData.map(async (issue) => {
+                        let bookDetails = undefined;
+                        let readerDetails = undefined;
+
+                        try {
+                            const fetchedBook = await getBookById(issue.book);
+                            if (fetchedBook) bookDetails = fetchedBook;
+                        } catch (err) {
+                             toast.error(`No Data is Available`, {
+                                 duration: 3000,
+                                 position: "top-right",
+                             });
+                        }
+
+                        try {
+                            const fetchedReader = await getReaderById(issue.reader);
+                            if (fetchedReader) readerDetails = fetchedReader;
+                        } catch (err) {
+                                toast.error(`No Data is Available`, {
+                                    duration: 3000,
+                                    position: "top-right",
+                                });
+                        }
+
+                        return {
+                            ...issue,
+                            bookDetails,
+                            readerDetails,
+                        };
+                    }),
+                );
+
+                const sorted = enrichedData.sort((a, b) => {
                     const isPendingA = a.status?.toLowerCase() === "pending";
                     const isPendingB = b.status?.toLowerCase() === "pending";
-
                     if (isPendingA && !isPendingB) return -1;
                     if (!isPendingA && isPendingB) return 1;
-
                     return new Date(b.lendingDate).getTime() - new Date(a.lendingDate).getTime();
                 });
 
-                setIssueBook(sortedData);
+                setIssueBook(sorted);
             } catch (error) {
-                console.log("Error while fetching data", error);
+                 toast.error(`No Data is Available`, {
+                     duration: 3000,
+                     position: "top-right",
+                 });
             }
         };
+
         fetchData();
     }, []);
 
-
     const filteredIssueBooks = issueBook.filter(
-        (book) =>
-            book.bookTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            book.readerName.toLowerCase().includes(searchTerm.toLowerCase()),
+        (book) => book.bookTitle.toLowerCase().includes(searchTerm.toLowerCase()) || book.readerName.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
     return (
@@ -80,8 +115,20 @@ const IssueBookPage = () => {
                                 className="transition-colors hover:bg-gray-50"
                             >
                                 <TableCell className="px-4 py-3 font-medium">{book.id}</TableCell>
-                                <TableCell className="px-4 py-3">{book.bookTitle}</TableCell>
-                                <TableCell className="px-4 py-3 font-medium text-blue-600">{book.readerName}</TableCell>
+                                <TableCell className="px-4 py-3">
+                                    <div>
+                                        <div className="font-semibold">{book.bookDetails?.title || "N/A"}</div>
+                                        <div className="text-xs text-gray-500">ID: {book.book || "N/A"}</div>
+                                    </div>
+                                </TableCell>
+
+                                <TableCell className="px-4 py-3 font-medium text-blue-600">
+                                    <div>
+                                        <div className="font-semibold">{book.readerDetails?.name || "N/A"}</div>
+                                        <div className="text-xs text-gray-500">ID: {book.readerDetails?.id || "N/A"}</div>
+                                    </div>
+                                </TableCell>
+
                                 <TableCell className="px-4 py-3">{book.lendingDate.split("T")[0]}</TableCell>
                                 <TableCell className={`px-4 py-3 ${book.status === "overdue" ? "text-red-600" : ""}`}>
                                     {book.dueDate.split("T")[0]}

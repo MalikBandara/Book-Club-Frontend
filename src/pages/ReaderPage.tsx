@@ -10,13 +10,14 @@ const ReaderPage = () => {
     const [readers, setReaders] = useState<Readers[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
 
-    const filteredReaders = readers.filter(
-        (reader) =>
-            reader.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            reader.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            reader.memberShipId.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
-
+    const filteredReaders = [...readers]
+        .sort((a, b) => b.id.localeCompare(a.id)) // Sort descending by id (latest first)
+        .filter(
+            (reader) =>
+                reader.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                reader.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                reader.memberShipId.toLowerCase().includes(searchTerm.toLowerCase()),
+        );
 
     useEffect(() => {
         const fetchData = async () => {
@@ -79,7 +80,7 @@ const ReaderPage = () => {
                     {/* Table Header */}
                     <TableHeader>
                         <TableRow className="bg-gray-100 text-sm text-gray-700">
-                            <TableHead className="px-4 py-3 text-left">#</TableHead>
+                            <TableHead className="px-4 py-3 text-left">ID</TableHead>
                             <TableHead className="px-4 py-3 text-left">Name</TableHead>
                             <TableHead className="px-4 py-3 text-left">Email</TableHead>
                             <TableHead className="px-4 py-3 text-left">Phone</TableHead>
@@ -97,7 +98,7 @@ const ReaderPage = () => {
                                 key={reader.id}
                                 className="hover:bg-gray-50"
                             >
-                                <TableCell className="px-4 py-3 font-medium">{index + 1}</TableCell>
+                                <TableCell className="px-4 py-3 font-medium">{reader.id}</TableCell>
                                 <TableCell className="px-4 py-3">{reader.name}</TableCell>
                                 <TableCell className="px-4 py-3 text-blue-600 hover:underline">
                                     <i className="fa-solid fa-envelope pe-3"></i>

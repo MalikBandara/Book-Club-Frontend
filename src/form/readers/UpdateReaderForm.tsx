@@ -74,8 +74,11 @@ const updateReader = () => {
             try {
                 const fetchReader = await getReaderById(id);
                 setReader(fetchReader);
-            } catch (error) {
-                console.log(error);
+            } catch (error: any) {
+                toast.error(`${error.response?.data?.message || error.message}`, {
+                    duration: 3000,
+                    position: "top-right",
+                });
             }
         };
         fetchReader();
@@ -85,6 +88,7 @@ const updateReader = () => {
         e.preventDefault();
         if (!id) return;
 
+        
         // ✅ Validate before submitting
         const errors = validate(reader);
         if (errors.length > 0) {
@@ -226,7 +230,7 @@ const updateReader = () => {
                         type="submit"
                         className="w-full rounded-md bg-green-600 py-2 text-white transition duration-200 hover:bg-green-700"
                     >
-                        Submit
+                        Update Reader
                     </Button>
                 </form>
             </div>

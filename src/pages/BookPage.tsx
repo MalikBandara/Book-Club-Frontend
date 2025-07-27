@@ -26,7 +26,10 @@ const BookPage = () => {
                 const data = await getBook();
                 setBooks(data);
             } catch (error) {
-                console.error("Error while fetching data", error);
+                toast.error(`No Data is Available`, {
+                    duration: 3000,
+                    position: "top-right",
+                });
             }
         };
         fetchData();
@@ -44,8 +47,11 @@ const BookPage = () => {
                 position: "top-right",
                 duration: 3000,
             });
-        } catch (error) {
-            console.error("Failed to delete book:", error);
+        } catch (error : any) {
+            toast.error(`${error.response?.data?.message || error.message}`, {
+                duration: 3000,
+                position: "top-right",
+            });
         }
     };
 
@@ -81,7 +87,7 @@ const BookPage = () => {
                     {/* Table Header */}
                     <TableHeader>
                         <TableRow className="bg-gray-100 text-sm text-gray-700">
-                            <TableHead className="px-4 py-3 text-left">#</TableHead>
+                            <TableHead className="px-4 py-3 text-left">ID</TableHead>
                             <TableHead className="px-4 py-3 text-left">Title</TableHead>
                             <TableHead className="px-4 py-3 text-left">Author</TableHead>
                             <TableHead className="px-4 py-3 text-left">Publisher</TableHead>
@@ -100,7 +106,7 @@ const BookPage = () => {
                                 key={book.id}
                                 className="hover:bg-gray-50"
                             >
-                                <TableCell className="px-4 py-3 font-medium">{index + 1}</TableCell>
+                                <TableCell className="px-4 py-3 font-medium">{book.id}</TableCell>
                                 <TableCell className="px-4 py-3">{book.title}</TableCell>
                                 <TableCell className="px-4 py-3">
                                     <i className="fa-solid fa-pen pe-3"></i>
